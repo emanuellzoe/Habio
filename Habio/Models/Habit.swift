@@ -17,6 +17,25 @@ struct Habit: Identifiable, Codable {
     var streak: Int
     var goal: Int
     var completedToday: Int
+    var durationDays: Int      // berapa hari habit ini berjalan
+    var startDate: Date        // tanggal mulai
+
+    var endDate: Date {
+        Calendar.current.date(byAdding: .day, value: durationDays, to: startDate) ?? startDate
+    }
+
+    var isActive: Bool {
+        Date() <= endDate
+    }
+
+    var daysRemaining: Int {
+        max(0, Calendar.current.dateComponents([.day], from: Date(), to: endDate).day ?? 0)
+    }
+
+    var progressPercent: Double {
+        let elapsed = Calendar.current.dateComponents([.day], from: startDate, to: Date()).day ?? 0
+        return min(1.0, Double(elapsed) / Double(max(1, durationDays)))
+    }
 
     var isCompletedToday: Bool {
         completedDates.contains { Calendar.current.isDateInToday($0) }

@@ -3,10 +3,12 @@ import SwiftUI
 struct ContentView: View {
     @State private var selection: SidebarItem = .dashboard
     @EnvironmentObject var store: HabitStore
+    @EnvironmentObject var auth: AuthStore
 
     var body: some View {
         NavigationSplitView(columnVisibility: .constant(.all)) {
             SidebarView(selection: $selection)
+                .environmentObject(auth)
                 .navigationSplitViewColumnWidth(min: 190, ideal: 210, max: 260)
         } detail: {
             detailView

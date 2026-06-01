@@ -89,6 +89,7 @@ struct WeeklyBarChart: View {
 // MARK: - Main Dashboard
 struct DashboardView: View {
     @EnvironmentObject var store: HabitStore
+    @State private var showAddHabit = false
 
     private var greeting: String {
         let hour = Calendar.current.component(.hour, from: Date())
@@ -125,6 +126,10 @@ struct DashboardView: View {
             .padding(28)
         }
         .background(Color(nsColor: .windowBackgroundColor))
+        .sheet(isPresented: $showAddHabit) {
+            AddHabitView()
+                .environmentObject(store)
+        }
     }
 
     // MARK: Header
@@ -143,7 +148,7 @@ struct DashboardView: View {
     }
 
     private var addHabitButton: some View {
-        Button(action: {}) {
+        Button(action: { showAddHabit = true }) {
             HStack(spacing: 6) {
                 Image(systemName: "plus")
                     .font(.system(size: 12, weight: .bold))

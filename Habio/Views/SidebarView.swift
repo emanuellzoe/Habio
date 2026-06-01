@@ -30,6 +30,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
 struct SidebarView: View {
     @Binding var selection: SidebarItem
     @EnvironmentObject var store: HabitStore
+    @EnvironmentObject var auth: AuthStore
 
     var body: some View {
         VStack(spacing: 0) {
@@ -89,7 +90,22 @@ struct SidebarView: View {
                 miniStat(value: "\(store.longestStreak)d", label: "Best Streak")
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.vertical, 10)
+
+            Divider().padding(.horizontal, 16)
+            Button(action: { auth.logout() }) {
+                HStack(spacing: 8) {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                        .font(.system(size: 13))
+                    Text("Keluar")
+                        .font(.system(size: 13, weight: .medium))
+                    Spacer()
+                }
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 10)
+            }
+            .buttonStyle(.plain)
         }
     }
 

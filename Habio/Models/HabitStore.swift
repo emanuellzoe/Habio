@@ -13,31 +13,34 @@ class HabitStore: ObservableObject {
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
         let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: today)!
 
+        let start7  = Calendar.current.date(byAdding: .day, value: -7,  to: today)!
+        let start21 = Calendar.current.date(byAdding: .day, value: -21, to: today)!
+
         habits = [
             Habit(name: "Morning Meditation", icon: "brain.head.profile", color: "purple",
                   frequency: .daily, completedDates: [today, yesterday, twoDaysAgo],
-                  streak: 7, goal: 1, completedToday: 1),
+                  streak: 7, goal: 1, completedToday: 1, durationDays: 30, startDate: start7),
             Habit(name: "Exercise", icon: "figure.run", color: "orange",
                   frequency: .daily, completedDates: [today, yesterday],
-                  streak: 3, goal: 1, completedToday: 1),
+                  streak: 3, goal: 1, completedToday: 1, durationDays: 21, startDate: twoDaysAgo),
             Habit(name: "Read", icon: "book.fill", color: "blue",
                   frequency: .daily, completedDates: [yesterday, twoDaysAgo],
-                  streak: 12, goal: 1, completedToday: 0),
+                  streak: 12, goal: 1, completedToday: 0, durationDays: 60, startDate: start21),
             Habit(name: "Drink Water", icon: "drop.fill", color: "cyan",
                   frequency: .daily, completedDates: [today, yesterday, twoDaysAgo],
-                  streak: 21, goal: 8, completedToday: 5),
+                  streak: 21, goal: 8, completedToday: 5, durationDays: 30, startDate: start21),
             Habit(name: "Sleep 8h", icon: "moon.fill", color: "indigo",
                   frequency: .daily, completedDates: [yesterday],
-                  streak: 2, goal: 1, completedToday: 0),
+                  streak: 2, goal: 1, completedToday: 0, durationDays: 14, startDate: yesterday),
             Habit(name: "Journaling", icon: "pencil.and.list.clipboard", color: "green",
                   frequency: .daily, completedDates: [today, yesterday],
-                  streak: 5, goal: 1, completedToday: 1),
+                  streak: 5, goal: 1, completedToday: 1, durationDays: 30, startDate: start7),
             Habit(name: "No Sugar", icon: "fork.knife", color: "red",
                   frequency: .daily, completedDates: [yesterday, twoDaysAgo],
-                  streak: 4, goal: 1, completedToday: 0),
+                  streak: 4, goal: 1, completedToday: 0, durationDays: 21, startDate: twoDaysAgo),
             Habit(name: "Cold Shower", icon: "shower.fill", color: "teal",
                   frequency: .daily, completedDates: [today],
-                  streak: 9, goal: 1, completedToday: 1),
+                  streak: 9, goal: 1, completedToday: 1, durationDays: 30, startDate: start7),
         ]
     }
 
@@ -52,6 +55,26 @@ class HabitStore: ObservableObject {
 
     var longestStreak: Int {
         habits.map(\.streak).max() ?? 0
+    }
+
+    func addHabit(name: String, icon: String, color: String, frequency: HabitFrequency, durationDays: Int) {
+        let habit = Habit(
+            name: name,
+            icon: icon,
+            color: color,
+            frequency: frequency,
+            completedDates: [],
+            streak: 0,
+            goal: 1,
+            completedToday: 0,
+            durationDays: durationDays,
+            startDate: Date()
+        )
+        habits.append(habit)
+    }
+
+    func deleteHabit(_ habit: Habit) {
+        habits.removeAll { $0.id == habit.id }
     }
 
     func toggleHabit(_ habit: Habit) {
